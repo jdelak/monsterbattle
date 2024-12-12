@@ -63,6 +63,24 @@ class Monster
     #[ORM\OneToMany(targetEntity: MonsterMove::class, mappedBy: 'monster_id')]
     private Collection $monsterMoves;
 
+    #[ORM\Column]
+    private ?float $base_hp_level = null;
+
+    #[ORM\Column]
+    private ?float $base_attack_level = null;
+
+    #[ORM\Column]
+    private ?float $base_defense_level = null;
+
+    #[ORM\Column]
+    private ?float $base_special_attack_level = null;
+
+    #[ORM\Column]
+    private ?float $base_special_defense_level = null;
+
+    #[ORM\Column]
+    private ?float $base_speed_level = null;
+
     public function __construct()
     {
         $this->monsterMoves = new ArrayCollection();
@@ -267,6 +285,78 @@ class Monster
                 $monsterMove->setMonsterId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getBaseHpLevel(): ?float
+    {
+        return $this->base_hp_level;
+    }
+
+    public function setBaseHpLevel(float $base_hp_level): static
+    {
+        $this->base_hp_level = $base_hp_level;
+
+        return $this;
+    }
+
+    public function getBaseAttackLevel(): ?float
+    {
+        return $this->base_attack_level;
+    }
+
+    public function setBaseAttackLevel(float $base_attack_level): static
+    {
+        $this->base_attack_level = $base_attack_level;
+
+        return $this;
+    }
+
+    public function getBaseDefenseLevel(): ?float
+    {
+        return $this->base_defense_level;
+    }
+
+    public function setBaseDefenseLevel(float $base_defense_level): static
+    {
+        $this->base_defense_level = $base_defense_level;
+
+        return $this;
+    }
+
+    public function getBaseSpecialAttackLevel(): ?float
+    {
+        return $this->base_special_attack_level;
+    }
+
+    public function setBaseSpecialAttackLevel(float $base_special_attack_level): static
+    {
+        $this->base_special_attack_level = $base_special_attack_level;
+
+        return $this;
+    }
+
+    public function getBaseSpecialDefenseLevel(): ?float
+    {
+        return $this->base_special_defense_level;
+    }
+
+    public function setBaseSpecialDefenseLevel(float $base_special_defense_level): static
+    {
+        $this->base_special_defense_level = $base_special_defense_level;
+
+        return $this;
+    }
+
+    public function getBaseSpeedLevel(): ?float
+    {
+        return $this->base_speed_level;
+    }
+
+    public function setBaseSpeedLevel(float $base_speed_level): static
+    {
+        $this->base_speed_level = $base_speed_level;
 
         return $this;
     }
