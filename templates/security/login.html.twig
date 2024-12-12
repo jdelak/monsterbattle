@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+<div class="w-full max-w-xs mx-auto">
+    <h1 class="text-4xl font-bold p-8">Please sign in</h1>
+    <div class="w-full max-w-xs">
+        <div class="bg-slate-200 shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3">
+                        You are logged in as {{ app.user.userIdentifier }}, <a class="text-blue-300" href="{{ path('app_logout') }}">Logout</a>
+                    </div>
+                {% endif %}
+
+                <div class="mb-6">
+                <label class="block text-gray-800 required" for="username">Email</label>
+                <input type="email" value="{{ last_username }}" name="_username" id="username" class="mt-1 w-full" autocomplete="email" required autofocus>
+                </div>
+                <div class="mb-6">
+                <label class="block text-gray-800 required" for="password">Password</label>
+                <input type="password" name="_password" id="password" class="mt-1 w-full" autocomplete="current-password" required>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                    value="{{ csrf_token('authenticate') }}"
+                >
+
+                {#
+                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                    See https://symfony.com/doc/current/security/remember_me.html
+
+                    <div class="checkbox mb-3">
+                        <input type="checkbox" name="_remember_me" id="_remember_me">
+                        <label for="_remember_me">Remember me</label>
+                    </div>
+                #}
+
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Sign in
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
