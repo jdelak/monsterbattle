@@ -4,6 +4,18 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    max_monster_level: '%env(MAX_MONSTER_LEVEL)%'
+    max_user_monster: '%env(MAX_USER_MONSTERS)%'
+    max_monsters_in_party: '%env(MAX_MONSTER_IN_PARTY)%'
+    max_bonus_hp_lvl: '%env(MAX_BONUS_HP_LVL)%'
+    max_bonus_attack_lvl: '%env(MAX_BONUS_ATTACK_LVL)%'
+    max_bonus_defense_lvl: '%env(MAX_BONUS_DEFENSE_LVL)%'
+    max_bonus_special_attack_lvl: '%env(MAX_BONUS_SPECIAL_ATTACK_LVL)%'
+    max_bonus_special_defense_lvl: '%env(MAX_BONUS_SPECIAL_DEFENSE_LVL)%'
+    max_bonus_speed_lvl: '%env(MAX_BONUS_SPEED_LVL)%'
+    min_badge_pvp: '%env(MIN_BADGES_PVP)%'
+    max_same_item: '%env(MAX_SAME_ITEM)%'
+    maintenance_mode: '%env(MAINTENANCE_MODE)%'
 
 services:
     # default configuration for services in *this* file
