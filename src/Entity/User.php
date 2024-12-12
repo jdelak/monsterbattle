@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -50,6 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?int $avatar = null;
+
+    /**
+     * @var Collection<int, UserMonster>
+     */
+    #[ORM\OneToMany(targetEntity: UserMonster::class, mappedBy: 'user_id')]
+    private Collection $userMonsters;
+
+    public function __construct()
+    {
+        $this->userMonsters = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -194,6 +207,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar(?int $avatar): static
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserMonster>
+     */
+    public function getUserMonsters(): Collection
+    {
+        return $this->userMonsters;
+    }
+
+    public function addUserMonster(UserMonster $userMonster): static
+    {
+        if (!$this->userMonsters->contains($userMonster)) {
+            $this->userMonsters->add($userMonster);
+            $userMonster->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserMonster(UserMonster $userMonster): static
+    {
+        if ($this->userMonsters->removeElement($userMonster)) {
+            // set the owning side to null (unless already changed)
+            if ($userMonster->getUserId() === $this) {
+                $userMonster->setUserId(null);
+            }
+        }
 
         return $this;
     }

@@ -81,9 +81,16 @@ class Monster
     #[ORM\Column]
     private ?float $base_speed_level = null;
 
+    /**
+     * @var Collection<int, UserMonster>
+     */
+    #[ORM\OneToMany(targetEntity: UserMonster::class, mappedBy: 'monster_id')]
+    private Collection $userMonsters;
+
     public function __construct()
     {
         $this->monsterMoves = new ArrayCollection();
+        $this->userMonsters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -357,6 +364,36 @@ class Monster
     public function setBaseSpeedLevel(float $base_speed_level): static
     {
         $this->base_speed_level = $base_speed_level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserMonster>
+     */
+    public function getUserMonsters(): Collection
+    {
+        return $this->userMonsters;
+    }
+
+    public function addUserMonster(UserMonster $userMonster): static
+    {
+        if (!$this->userMonsters->contains($userMonster)) {
+            $this->userMonsters->add($userMonster);
+            $userMonster->setMonsterId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserMonster(UserMonster $userMonster): static
+    {
+        if ($this->userMonsters->removeElement($userMonster)) {
+            // set the owning side to null (unless already changed)
+            if ($userMonster->getMonsterId() === $this) {
+                $userMonster->setMonsterId(null);
+            }
+        }
 
         return $this;
     }
