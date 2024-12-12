@@ -36,9 +36,16 @@ class Move
     #[ORM\OneToMany(targetEntity: MoveEffect::class, mappedBy: 'id_move')]
     private Collection $moveEffects;
 
+    /**
+     * @var Collection<int, MonsterMove>
+     */
+    #[ORM\OneToMany(targetEntity: MonsterMove::class, mappedBy: 'move_id')]
+    private Collection $monsters;
+
     public function __construct()
     {
         $this->moveEffects = new ArrayCollection();
+        $this->monsters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +137,36 @@ class Move
             // set the owning side to null (unless already changed)
             if ($moveEffect->getIdMove() === $this) {
                 $moveEffect->setIdMove(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MonsterMove>
+     */
+    public function getMonsters(): Collection
+    {
+        return $this->monsters;
+    }
+
+    public function addMonster(MonsterMove $monster): static
+    {
+        if (!$this->monsters->contains($monster)) {
+            $this->monsters->add($monster);
+            $monster->setMoveId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonster(MonsterMove $monster): static
+    {
+        if ($this->monsters->removeElement($monster)) {
+            // set the owning side to null (unless already changed)
+            if ($monster->getMoveId() === $this) {
+                $monster->setMoveId(null);
             }
         }
 

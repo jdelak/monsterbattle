@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MonsterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MonsterRepository::class)]
@@ -54,6 +56,17 @@ class Monster
 
     #[ORM\Column(nullable: true)]
     private ?int $evolution_level = null;
+
+    /**
+     * @var Collection<int, MonsterMove>
+     */
+    #[ORM\OneToMany(targetEntity: MonsterMove::class, mappedBy: 'monster_id')]
+    private Collection $monsterMoves;
+
+    public function __construct()
+    {
+        $this->monsterMoves = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -224,6 +237,36 @@ class Monster
     public function setEvolutionLevel(?int $evolution_level): static
     {
         $this->evolution_level = $evolution_level;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, MonsterMove>
+     */
+    public function getMonsterMoves(): Collection
+    {
+        return $this->monsterMoves;
+    }
+
+    public function addMonsterMove(MonsterMove $monsterMove): static
+    {
+        if (!$this->monsterMoves->contains($monsterMove)) {
+            $this->monsterMoves->add($monsterMove);
+            $monsterMove->setMonsterId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonsterMove(MonsterMove $monsterMove): static
+    {
+        if ($this->monsterMoves->removeElement($monsterMove)) {
+            // set the owning side to null (unless already changed)
+            if ($monsterMove->getMonsterId() === $this) {
+                $monsterMove->setMonsterId(null);
+            }
+        }
 
         return $this;
     }
