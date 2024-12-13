@@ -59,9 +59,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: UserMonster::class, mappedBy: 'user_id')]
     private Collection $userMonsters;
 
+    #[ORM\Column]
+    private ?int $elo = null;
+
+    /**
+     * @var Collection<int, UserItem>
+     */
+    #[ORM\OneToMany(targetEntity: UserItem::class, mappedBy: 'user_id')]
+    private Collection $userItems;
+
     public function __construct()
     {
         $this->userMonsters = new ArrayCollection();
+        $this->userItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -235,6 +245,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($userMonster->getUserId() === $this) {
                 $userMonster->setUserId(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getElo(): ?int
+    {
+        return $this->elo;
+    }
+
+    public function setElo(int $elo): static
+    {
+        $this->elo = $elo;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserItem>
+     */
+    public function getUserItems(): Collection
+    {
+        return $this->userItems;
+    }
+
+    public function addUserItem(UserItem $userItem): static
+    {
+        if (!$this->userItems->contains($userItem)) {
+            $this->userItems->add($userItem);
+            $userItem->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserItem(UserItem $userItem): static
+    {
+        if ($this->userItems->removeElement($userItem)) {
+            // set the owning side to null (unless already changed)
+            if ($userItem->getUserId() === $this) {
+                $userItem->setUserId(null);
             }
         }
 

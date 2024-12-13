@@ -74,6 +74,9 @@ class UserMonster
     #[ORM\Column]
     private ?int $position = null;
 
+    #[ORM\Column]
+    private array $learned_moves = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -315,6 +318,18 @@ class UserMonster
     public function setPosition(int $position): static
     {
         $this->position = $position;
+
+        return $this;
+    }
+
+    public function getLearnedMoves(): array
+    {
+        return $this->learned_moves;
+    }
+
+    public function setLearnedMoves(array $learned_moves): static
+    {
+        $this->learned_moves = $learned_moves;
 
         return $this;
     }
